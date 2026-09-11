@@ -1,0 +1,40 @@
+# Python environments and tooling
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editor and local history files
+.history/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local face data and generated debug output
+data/enroll/*
+!data/enroll/.gitkeep
+data/debug_aligned/
+data/db/*
+!data/db/.gitkeep
+
+# Downloaded model bundles and large model weights
+buffalo_l.zip
+buffalo_l_extracted/
+models/*.onnx
+
+# Runtime output
+*.log
+*.tmp
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db

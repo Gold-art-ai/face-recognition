@@ -1,42 +1,55 @@
 # face-recognition-5pt
 
-A CPU-only face recognition pipeline: Haar detection + MediaPipe 5-point
-landmarks + similarity-transform alignment + ArcFace ONNX embeddings.
+CPU-only face recognition using Haar face detection, MediaPipe 5-point
+landmarks, similarity-transform alignment, and ArcFace ONNX embeddings.
 
-See the accompanying book for full explanations. Quick start:
+## Setup
 
-1. Install Python 3.11 (MediaPipe FaceMesh legacy API is not available on Python 3.13).
-2. py -3.11 -m venv .venv
-3. .venv\Scripts\Activate.ps1      (Windows PowerShell)
-3. pip install -r requirements.txt
-4. python -m src.camera            (validate webcam)
-5. python -m src.detect            (validate face box)
-6. python -m src.landmarks         (validate 5 points)
-7. python -m src.align             (validate alignment)
-8. Download the real ArcFace model into models/embedder_arcface.onnx, or keep it as models/w600k_r50.onnx
-9. python -m src.embed             (validate embeddings)
-10. python -m src.enroll           (enroll people)
-11. python -m src.evaluate         (tune threshold)
-12. python -m src.recognize        (live recognition)
+Use Python 3.11. MediaPipe's legacy FaceMesh API is not available on Python
+3.13.
 
-Optional ESP8266 servo pan over MQTT
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
 
-1. Open hardware/esp8266_servo_pan/esp8266_servo_pan.ino in Arduino IDE.
-2. Set WIFI_SSID and WIFI_PASS, then upload to the ESP8266MOD / NodeMCU.
-3. Wire servo signal to D1/GPIO5, servo power to external 5V, and connect all grounds together.
-4. Install the Arduino PubSubClient library if Arduino IDE asks for it.
-5. Confirm Serial Monitor shows WiFi connected, MQTT connected, and subscribed to:
-   face-recognition/servo/pan
-6. Install Python requirements:
-   python -m pip install -r requirements.txt
-7. Test automatic camera pan:
-   python -m src.camera --servo-mqtt --auto-scan
-8. Run face-following recognition:
-   python -m src.recognize --servo-mqtt
+Download a compatible ArcFace ONNX model separately and place it at
+`models/embedder_arcface.onnx`. Model weights and face data are intentionally
+ignored by Git because they are large and may contain personal information.
 
-Defaults:
-- MQTT broker: broker.benax.rw
-- MQTT port: 1883
-- MQTT topic: face-recognition/servo/pan
-"# face-recognition" 
-"# face-recognition" 
+Run the pipeline stages from the repository root:
+
+```powershell
+python -m src.camera
+python -m src.detect
+python -m src.landmarks
+python -m src.align
+python -m src.embed
+python -m src.enroll
+python -m src.evaluate
+python -m src.recognize
+```
+
+## Optional ESP8266 servo pan
+
+1. Open `hardware/esp8266_servo_pan/esp8266_servo_pan.ino` in Arduino IDE.
+2. Set `WIFI_SSID`, `WIFI_PASS`, and `MQTT_BROKER` for your local network.
+3. Install the Arduino `PubSubClient` library and upload to an ESP8266/NodeMCU.
+4. Wire the servo signal to D1/GPIO5, power the servo from an external 5 V
+   supply, and connect the grounds.
+5. Test the Python MQTT control:
+
+```powershell
+python -m src.camera --servo-mqtt --auto-scan --mqtt-broker YOUR_BROKER
+python -m src.recognize --servo-mqtt
+```
+
+The default topic is `face-recognition/servo/pan` and the default port is
+`1883`. Do not commit Wi-Fi credentials, broker credentials, enrolled images,
+or generated face databases.
+
+## Project notes
+
+The `book/` directory contains the detailed walkthrough. `src_old/` contains
+the earlier implementation for reference.
