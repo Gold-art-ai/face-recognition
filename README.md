@@ -39,3 +39,4 @@ Defaults:
 - MQTT port: 1883
 - MQTT topic: face-recognition/servo/pan
 "# face-recognition" 
+"# face-recognition" 
