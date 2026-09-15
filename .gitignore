@@ -26,7 +26,7 @@ data/db/*
 !data/db/.gitkeep
 
 # Downloaded model bundles and large model weights
-buffalo_l.zip
+
 buffalo_l_extracted/
 models/*.onnx
 
